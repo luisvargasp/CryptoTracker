@@ -9,8 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var vm : HomeViewModel
-    
-    
+
     @State private var showPortfolio: Bool = false
     var body: some View {
         ZStack{
@@ -19,6 +18,8 @@ struct HomeView: View {
             
             VStack{
                 homeHeader
+                HomeStatsView(showPortfolio: $showPortfolio)
+                SearchBarView(searchText: $vm.searchText)
                 HStack{
                     Text("Coin")
                     Spacer()
@@ -37,10 +38,12 @@ struct HomeView: View {
                         ForEach(vm.coins){ coin in
                             CoinRowView(coin: coin,showHoldings: false)
                                 .listRowInsets(.init(top: 10, leading: 00, bottom: 10, trailing: 10))
+                                //.listRowSeparator(.hidden)
                         }
                         
                     }.listStyle(.plain)
                         .transition(.move(edge: .leading))
+                       
                     
                 }else{
                     List{
