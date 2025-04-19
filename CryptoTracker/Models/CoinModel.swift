@@ -7,8 +7,20 @@
 
 import Foundation
 
+struct Coin : Identifiable,Hashable {
+    var id: String
+    var name: String
+    var symbol: String
+    var currentPrice: Double
+}
 
-struct CoinModel: Codable,Identifiable {
+
+
+struct CoinModel: Codable,Identifiable,Hashable, Equatable {
+    static func == (lhs: CoinModel, rhs: CoinModel) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
     let id, symbol, name: String
       let image: String
       let currentPrice: Double
@@ -67,11 +79,14 @@ struct CoinModel: Codable,Identifiable {
         var rank: Int {
             return Int(marketCapRank ?? 0)
         }
+    func toCoin () -> Coin {
+        return Coin(id: self.id, name: self.name, symbol: self.symbol, currentPrice: self.currentPrice)
+    }
         
     
 }
 
 
-struct SparklineIn7D: Codable {
+struct SparklineIn7D: Codable,Hashable {
     let price: [Double]?
 }

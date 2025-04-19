@@ -39,21 +39,11 @@ class HomeViewModel : ObservableObject {
         }.store(in: &cancellables)
         
         $searchText
-            .combineLatest(dataService.$allCoins)
+            .combineLatest(dataService.$allCoins, $sortOption)
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
         
-            .map { (searchText, coins ) -> [CoinModel] in
-                guard !searchText.isEmpty else {
-                    return coins
-                }
-                
-                let lowercasedSearchText = searchText.lowercased()
-                return coins.filter { coin in
-                    coin.name.lowercased().contains(lowercasedSearchText) ||
-                    coin.symbol.lowercased().contains(lowercasedSearchText) ||
-                    coin.id.lowercased( ).contains(lowercasedSearchText)
-                }
-            }.sink { [weak self] filteredCoins in
+            .map (filterAndSortCoins)
+            .sink { [weak self] filteredCoins in
                 self?.coins = filteredCoins
             }.store(in: &cancellables)
         

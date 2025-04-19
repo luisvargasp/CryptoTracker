@@ -9,11 +9,15 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject private var vm : HomeViewModel
-
+    
     @State private var showPortfolio: Bool = false
     @State private var showPortfolioView = false
+    
+    @State var stackPath : [CoinModel] = []
+
     var body: some View {
         ZStack{
+            
             Color.theme.background
                 .ignoresSafeArea()
                 .sheet(isPresented: $showPortfolioView, content: {
@@ -41,34 +45,50 @@ struct HomeView: View {
                     List{
                         
                         ForEach(vm.coins){ coin in
-                            CoinRowView(coin: coin,showHoldings: false)
-                                .listRowInsets(.init(top: 10, leading: 00, bottom: 10, trailing: 10))
-                                //.listRowSeparator(.hidden)
+                            
+                            NavigationLink(value : coin, label: {
+                                CoinRowView(coin: coin,showHoldings: false)
+                                    .listRowInsets(.init(top: 10, leading: 00, bottom: 10, trailing: 10))
+                            })
+                            
+            
+                        
+                            
+                            //.listRowSeparator(.hidden)
                         }
-                       
+                        
                         
                     }.listStyle(.plain)
                         .transition(.move(edge: .leading))
                         .refreshable {
-                            vm.reloadData() 
+                            vm.reloadData()
                         }
-                       
+                      
+                    
                     
                 }else{
                     List{
                         
                         ForEach(vm.portfolioCoins){ coin in
-                            CoinRowView(coin: coin,showHoldings: true)
-                                .listRowInsets(.init(top: 10, leading: 00, bottom: 10, trailing: 10))
+                            NavigationLink(value : coin, label: {
+                                CoinRowView(coin: coin,showHoldings: false)
+                                    .listRowInsets(.init(top: 10, leading: 00, bottom: 10, trailing: 10))
+                            })
                         }
                         
                     }.listStyle(.plain)
                         .transition(.move(edge: .trailing))
                     
                 }
+                   
+                
                 
                 Spacer ( minLength: 0)
             }
+            .navigationDestination(for: CoinModel.self , destination: {
+                coin in DetailView(coin: coin)
+            } )
+        
         }
     }
 }
@@ -78,6 +98,7 @@ struct HomeView: View {
         
         HomeView()
             .toolbar(.hidden)
+            
     }.environmentObject(DeveloperPreview.instance.homeVM)
 }
 
