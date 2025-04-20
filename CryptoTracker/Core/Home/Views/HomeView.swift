@@ -12,6 +12,7 @@ struct HomeView: View {
     
     @State private var showPortfolio: Bool = false
     @State private var showPortfolioView = false
+    @State private var showInfoView = false
     
     @State var stackPath : [CoinModel] = []
 
@@ -24,6 +25,7 @@ struct HomeView: View {
                     PortfolioView()
                     
                 })
+               
             
             VStack{
                 homeHeader
@@ -41,6 +43,9 @@ struct HomeView: View {
                 .font(.caption)
                 .foregroundStyle(Color.theme.secondaryText)
                 .padding(.horizontal)
+                .sheet(isPresented: $showInfoView, content: {
+                    InfoView() 
+                })
                 if !showPortfolio{
                     List{
                         
@@ -110,6 +115,8 @@ extension HomeView {
                 .onTapGesture {
                     if showPortfolio {
                         showPortfolioView.toggle()
+                    }else{
+                        showInfoView.toggle()
                     }
                 }
                 .background(

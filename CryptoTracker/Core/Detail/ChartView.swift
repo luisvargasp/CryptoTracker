@@ -40,7 +40,7 @@ struct ChartView: View {
                 .padding(.horizontal, 4)
         }
         .font(.caption)
-        .foregroundColor(Color.theme.secondaryText)
+        .foregroundStyle(Color.theme.secondaryText)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 withAnimation(.linear(duration: 2.0)) {
@@ -76,10 +76,12 @@ extension ChartView {
             }
             .trim(from: 0, to: percentage)
             .stroke(lineColor, style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+            .clipped()
             .shadow(color: lineColor, radius: 10, x: 0.0, y: 10)
             .shadow(color: lineColor.opacity(0.5), radius: 10, x: 0.0, y: 20)
             .shadow(color: lineColor.opacity(0.2), radius: 10, x: 0.0, y: 30)
             .shadow(color: lineColor.opacity(0.1), radius: 10, x: 0.0, y: 40)
+            
         }
     }
     

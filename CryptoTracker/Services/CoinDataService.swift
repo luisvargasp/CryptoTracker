@@ -10,7 +10,6 @@ import Combine
 class CoinDataService {
     @Published var allCoins: [CoinModel] = []
     
-    private var apiKey   = "CG-1FyrBDH34BXJ3zJYmaXsoWps"
     
     var coinsSubscription: AnyCancellable?
     
